@@ -1,5 +1,8 @@
 <?php
 App::uses('AppController', 'Controller');
+App::uses('CakeEmail', 'Network/Email');
+//App::import('Controller','Users');
+//App::import('Controller','Statuses');
 
 /**
  * Leads Controller
@@ -32,7 +35,7 @@ class LeadsController extends AppController {
         
         $_serialize = array('data');
         
-        $_header = array('Id',
+        $_header = array(
                            'Account Name',
                            'Name',
                            'Board Number',
@@ -48,7 +51,7 @@ class LeadsController extends AppController {
                 );
         
         $_extract = array(
-                            'Lead.id',
+                            
                             'Account.account_name',
                             'Lead.name',
                             'Lead.board_number',
@@ -68,6 +71,61 @@ class LeadsController extends AppController {
         $this->viewClass = 'CsvView.Csv';
         $this->set( compact( 'data', '_serialize', '_header', '_extract' ) );
     }
+    
+    
+// Mail Set up
+   
+/**function _sendMail($id) {
+    $this->loadModel('User');
+    $this->loadModel('Account');
+    
+    $Email = new CakeEmail();
+    $this->Lead->contain( array('User','Account') );
+                    $email = $Email->from(array('vikas@meridiansolutions.co'=>'Meridian Lead Sales Management'))
+                             //->to('shankar@meridiansolutions.co.in')
+                            ->viewVars(array(
+                                'user' => $this->User->find('first',array('conditions'=>  array('id'=> $this->Auth->user('id')))),
+                                'account' => $this->Lead->Account->find('first')
+                                ))
+                             ->to('vikas.meridiansolutions@gmail.com')
+                             ->subject('Lead Add')
+                            ->emailFormat('html')
+                            ->template('new_lead')
+                             ->send('A Lead has been Added');
+}*/
+    
+    function _sendMail($id) {
+    $this->loadModel('User');
+    $this->loadModel('Account');
+    
+    $conditionsSubQuery ['"Lead"."user_id"'] = $this->Auth->user('id'); 
+    $db = $this->Lead->getDataSource();
+    $subQuery = $db->buildStatement(array(
+        'table'=>$db->fullTableName($this->Lead),
+        'conditions'=>$conditionsSubQuery
+    ),
+        $this->Lead
+            );
+    $subQuery ='"Lead"."account_id" IN ('.$subQuery.')';
+    $subQueryExpression = $db->expression($subQuery);
+    $conditions[] = $subQueryExpression;
+    
+    
+    $Email = new CakeEmail();
+    //$this->Lead->contain( array('User','Account') );
+                    $email = $Email->from(array('vikas@meridiansolutions.co'=>'Meridian Lead Sales Management'))
+                             //->to('shankar@meridiansolutions.co.in')
+                            ->viewVars(array(
+                                'user' => $this->User->find('first',array('conditions'=>  array('id'=> $this->Auth->user('id')))),
+                                 'account' => $this->Account->find('first',array('conditions'=>array('id'=>$conditions)))
+                                ))
+                             ->to('vikas.meridiansolutions@gmail.com')
+                             ->subject('Lead Add')
+                            ->emailFormat('html')
+                            ->template('new_lead')
+                             ->send('A Lead has been Added');
+}
+
 
 /**
  * index method
@@ -109,9 +167,12 @@ class LeadsController extends AppController {
 	public function add() {
 		if ($this->request->is('post')) {
 			$this->Lead->create();
+                                  //$this->Lead->contain( array('User','Status') );
+
                         $this->request->data['Lead']['user_id'] = $this->Auth->user('id');
-                        //$this->request->data['Lead']['date_added'] =date_default_timezone_set("Asia/Kolkata");
+                       $this->request->data['Lead']['date_added'] = date_default_timezone_set("Asia/Kolkata");
 			if ($this->Lead->save($this->request->data)) {
+                            $this->_sendMail($this->request->data['Lead']['user_id']);
 				$this->Session->setFlash(__('The lead has been saved.'),'alert',array(
                                     'plugin' => 'BoostCake',
                                     'class' => 'alert-success'
@@ -242,6 +303,10 @@ class LeadsController extends AppController {
                 );
 		$this->set('leads', $this->Paginator->paginate());
         }
+        
+        
+        
+        
         
         
         }

@@ -24,7 +24,7 @@
 		<legend><?php echo __('Add Lead'); ?></legend>
 	<?php
                 echo $this->Form->input('account_id');
-                echo $this->Form->input('name');
+                echo $this->Form->input('name',array('label'=>'Contact Person'));
                 echo $this->Form->input('email');
                 echo $this->Form->input('board_number');
                 echo $this->Form->input('mobile_number');
@@ -41,13 +41,14 @@
                                 
 <?php
                 echo $this->Form->input('closing_month',array(
+                    'label'=>'Likely Closing Date',
                     "between"=>"<div class='col-sm-10 input-group date form_date col-md-5' data-date='' data-date-format='dd MM yyyy' data-link-field='dtp_input2' data-link-format='yyyy-mm-dd'>",
                     'after' => '<span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
                                 <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
 </div>',
                     'readonly'
                 ));
-                echo $this->Form->input('probablity');
+                echo $this->Form->input('probablity',array('type'=>'select','options'=>array('High'=>'High','Medium'=>'Medium','Low'=>'Low')));
                 echo $this->Form->input('status_id');
                 //echo $this->Form->hidden( 'user_id' );
                 //echo $this->Form->input('user_id',array('default'=> $current_user['username']));

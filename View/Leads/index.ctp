@@ -30,15 +30,18 @@
 			<th><?php echo $this->Paginator->sort('total_price_quoted'); ?></th>
 			<th><?php echo $this->Paginator->sort('our_price'); ?></th>
 			<th><?php echo $this->Paginator->sort('margin'); ?></th>
-			<th><?php echo $this->Paginator->sort('closing_month'); ?></th>
+			<th><?php echo $this->Paginator->sort('closing_month','Likely Closing Date'); ?></th>
 			<th><?php echo $this->Paginator->sort('probablity'); ?></th>
 			<th><?php echo $this->Paginator->sort('status_id'); ?></th>
+                        <?php if($current_user['role']=='admin'): ?>
 			<th><?php echo $this->Paginator->sort('user_id'); ?></th>
+                        <?php endif;?>
 			<th><?php echo $this->Paginator->sort('date_added'); ?></th>
 			<th class="actions"><?php echo __('Actions'); ?></th>
 	</tr>
 	<?php foreach ($leads as $lead): ?>
 	<tr>
+            <?php if( $current_user['username'] == $lead['User']['username']|| $current_user['role'] == 'admin'  ) :?>
 		<!--<td><?php //echo h($lead['Lead']['id']); ?>&nbsp;</td>-->
 		<td>
 			<?php echo $this->Html->link($lead['Account']['account_name'], array('controller' => 'accounts', 'action' => 'view', $lead['Account']['id'])); ?>
@@ -61,26 +64,36 @@
 		<td>
 			<?php echo $this->Html->link($lead['Status']['status'], array('controller' => 'statuses', 'action' => 'view', $lead['Status']['id'])); ?>
 		</td>
+                <?php if($current_user['role']=='admin'): ?>
 		<td>
 			<?php echo $this->Html->link($lead['User']['username'], array('controller' => 'users', 'action' => 'view', $lead['User']['id'])); ?>
 		</td>
+                <?php endif; ?>
 		<td><?php echo h($lead['Lead']['date_added']); ?>&nbsp;</td>
 		<td class="actions">
 			<?php echo $this->Html->link(__('View'), array('action' => 'view', $lead['Lead']['id'])); ?>
 			<?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $lead['Lead']['id'])); ?>
 			<?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $lead['Lead']['id']), null, __('Are you sure you want to delete # %s?', $lead['Lead']['id'])); ?>
 		</td>
+                <?php endif; ?>
 	</tr>
 <?php endforeach; ?>
 	</table>
 	<p>
 	<?php
-	//echo $this->Paginator->counter(array(
-	//'format' => __('Page {:page} of {:pages}, showing {:current} records out of {:count} total, starting on record {:start}, ending on {:end}')
-	//));
+	echo $this->Paginator->counter(array(
+	'format' => __('Page {:page} of {:pages}, showing {:current} records out of {:count} total, starting on record {:start}, ending on {:end}')
+	));
 	?>	</p>
+        <div class="paging">
+	<?php
+		echo $this->Paginator->prev('< ' . __('previous'), array(), null, array('class' => 'prev disabled'));
+		echo $this->Paginator->numbers(array('separator' => ''));
+		echo $this->Paginator->next(__('next') . ' >', array(), null, array('class' => 'next disabled'));
+	?>
+	</div>
 	<?php //echo $this->element('pagination') ?>
-        <?php echo $this->Paginator->pager(); ?>
+        <?php //echo $this->Paginator->pager(); ?>
 </div>
 <script>
   $('.dropdown-toggle').dropdown()

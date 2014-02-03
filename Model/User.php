@@ -98,6 +98,7 @@ class User extends AppModel {
                         $this->data[$this->alias]['password']
                         );
                     }
+                    // fill created field in users table
                     $nowDate = date('Y-m-d H:i:s'); 
                     if ($this->createField ) {
                         $this->set($this->createField, $nowDate);

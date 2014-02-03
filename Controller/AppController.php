@@ -36,7 +36,7 @@ class AppController extends Controller {
                                 'Form' => array('className' => 'BoostCake.BoostCakeForm'),
                                 'Paginator' => array('className' => 'BoostCake.BoostCakePaginator'),
                                 'Session',
-                                'Time');
+                                );
     public $components = array( 
                              
                                 'Session',
