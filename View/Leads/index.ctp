@@ -1,5 +1,7 @@
 <div class="leads index">
+    <?php if ($current_user['role']=='admin'): ?>
     <div style="float: right"><?php echo $this->Html->link('CSV','/leads/exportView/',array('class' => 'btn btn-success')); ?></div>
+    <?php endif; ?>
    
     
       <!-------------Action Menu------------>
@@ -7,8 +9,10 @@
       <!------------------------------------>
       
       <!-------------Filter---------------->
-      
-    <?php echo $this->element('filterMenu');?>
+      <div class="row">
+    <?php echo $this->element('filterMenu',array() );?>
+      <?php //echo $this->element('date_filter',array() );?>
+      </div>
       <!-------------/Filter---------------->
     
 	<h2><?php echo __('Leads'); ?></h2>
@@ -40,6 +44,10 @@
 			<th class="actions"><?php echo __('Actions'); ?></th>
 	</tr>
 	<?php foreach ($leads as $lead): ?>
+        <?php  
+        
+        
+        ?>
 	<tr>
             <?php if( $current_user['username'] == $lead['User']['username']|| $current_user['role'] == 'admin'  ) :?>
 		<!--<td><?php //echo h($lead['Lead']['id']); ?>&nbsp;</td>-->
@@ -59,7 +67,33 @@
 		<td><?php echo h($lead['Lead']['total_price_quoted']); ?>&nbsp;</td>
 		<td><?php echo h($lead['Lead']['our_price']); ?>&nbsp;</td>
 		<td><?php echo h($lead['Lead']['margin']); ?>&nbsp;</td>
-		<td><?php echo h($lead['Lead']['closing_month']); ?>&nbsp;</td>
+		<?php 
+                       
+                        $d1 = $lead['Lead']['closing_month'];
+                        //$d2 = 
+                        $nowDate = date('Y-m-d');
+                        //$diff = $nowDate->diff($d1)->format("Y-m-d");
+                        $overdue = (strtotime($nowDate)- strtotime($d1))/24/3600; 
+                       //$overdue = ceil(abs($nowDate - $d1) / 86400);
+                        if($nowDate>$lead['Lead']['closing_month'] && ($lead['Status']['status']=='Active')){
+                        echo '<td style="background-color: rgb(230, 121, 121);">';
+                        echo h($lead['Lead']['closing_month']); 
+                        echo '<br>';
+                        echo '('.$overdue.')';
+                        echo "</td>";
+                        }
+                        
+                        else {
+                            echo '<td>';
+                        echo h($lead['Lead']['closing_month']); 
+                        echo "</td>";
+                        }
+                       
+                        
+                     ?>&nbsp;
+                
+                
+                
 		<td><?php echo h($lead['Lead']['probablity']); ?>&nbsp;</td>
 		<td>
 			<?php echo $this->Html->link($lead['Status']['status'], array('controller' => 'statuses', 'action' => 'view', $lead['Status']['id'])); ?>

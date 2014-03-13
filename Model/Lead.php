@@ -1,6 +1,5 @@
 <?php
 App::uses('AppModel', 'Model');
-App::uses('CakeEmail', 'Network/Email');
 /**
  * Lead Model
  *
@@ -15,8 +14,8 @@ class Lead extends AppModel {
  *
  * @var string
  */
+  public $actsAs = array('Containable');
 	public $displayField = 'name';
-        public $actsAs = array('Containable');
 
 /**
  * Validation rules
@@ -44,9 +43,9 @@ class Lead extends AppModel {
 				//'on' => 'create', // Limit validation to 'create' or 'update' operations
 			),
 		),
-		'email' => array(
-			'email' => array(
-				'rule' => array('email'),
+		'board_number' => array(
+			'notEmpty' => array(
+				'rule' => array('notEmpty'),
 				//'message' => 'Your custom message here',
 				//'allowEmpty' => false,
 				//'required' => false,
@@ -64,7 +63,37 @@ class Lead extends AppModel {
 				//'on' => 'create', // Limit validation to 'create' or 'update' operations
 			),
 		),
-		'probablity' => array(
+		'total_price_quoted' => array(
+			'notEmpty' => array(
+				'rule' => array('notEmpty'),
+				//'message' => 'Your custom message here',
+				//'allowEmpty' => false,
+				//'required' => false,
+				//'last' => false, // Stop validation after this rule
+				//'on' => 'create', // Limit validation to 'create' or 'update' operations
+			),
+		),
+		'our_price' => array(
+			'notEmpty' => array(
+				'rule' => array('notEmpty'),
+				//'message' => 'Your custom message here',
+				//'allowEmpty' => false,
+				//'required' => false,
+				//'last' => false, // Stop validation after this rule
+				//'on' => 'create', // Limit validation to 'create' or 'update' operations
+			),
+		),
+		'margin' => array(
+			'notEmpty' => array(
+				'rule' => array('notEmpty'),
+				//'message' => 'Your custom message here',
+				//'allowEmpty' => false,
+				//'required' => false,
+				//'last' => false, // Stop validation after this rule
+				//'on' => 'create', // Limit validation to 'create' or 'update' operations
+			),
+		),
+		'closing_month' => array(
 			'notEmpty' => array(
 				'rule' => array('notEmpty'),
 				//'message' => 'Your custom message here',
@@ -94,23 +123,12 @@ class Lead extends AppModel {
 				//'on' => 'create', // Limit validation to 'create' or 'update' operations
 			),
 		),
-		
 	);
 
 	//The Associations below have been created with all possible keys, those that are not needed can be removed
 
-           /**public function afterSave($created, $options = array()) {
-                parent::afterSave($created, $options);
-                 $Email = new CakeEmail();
-                    $email = $Email->from(array('vikas@meridiansolutions.co' => 'Meridian LMS'))
-                             ->to('shankar@meridiansolutions.co.in')
-                             ->cc('vikas.meridiansolutions@gmail.com')
-                             ->subject('Lead Add')
-                             ->send('A Lead has been Added');
-
-                
-            }*/
-       //public function beforeSave($options ) { $this->request->data['Lead']['user_id'] = $this->Auth->user('id'); }
+        
+        
         var $createField = 'date_added';
         public function beforeSave($options = array()) {
             parent::beforeSave($options);
@@ -121,8 +139,7 @@ class Lead extends AppModel {
             
             return true;
         }
-
-        /**
+/**
  * belongsTo associations
  *
  * @var array

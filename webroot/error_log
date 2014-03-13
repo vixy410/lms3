@@ -1,0 +1,8 @@
+[30-Jan-2014 11:48:05 Asia/Kolkata] PHP Fatal error:  Cannot access empty property in /home/ksshank/public_html/lms/lib/Cake/Controller/Controller.php on line 437
+[30-Jan-2014 20:00:13 Asia/Kolkata] PHP Fatal error:  Call to undefined method LeadsController::Lead() in /home/ksshank/public_html/lms/app/Controller/LeadsController.php on line 88
+[30-Jan-2014 15:43:17 UTC] PHP Fatal error:  Call to a member function find() on a non-object in /home/ksshank/public_html/lms/app/Controller/LeadsController.php on line 162
+[30-Jan-2014 15:43:18 UTC] PHP Fatal error:  Call to a member function find() on a non-object in /home/ksshank/public_html/lms/app/Controller/LeadsController.php on line 162
+[30-Jan-2014 15:59:13 UTC] PHP Fatal error:  Call to a member function find() on a non-object in /home/ksshank/public_html/lms/app/Controller/LeadsController.php on line 162
+[30-Jan-2014 15:59:14 UTC] PHP Fatal error:  Call to a member function find() on a non-object in /home/ksshank/public_html/lms/app/Controller/LeadsController.php on line 162
+[31-Jan-2014 14:35:50 Asia/Kolkata] PHP Fatal error:  Call to undefined method LeadsController::Lead() in /home/ksshank/public_html/lms/app/Controller/LeadsController.php on line 85
+[01-Feb-2014 10:10:58 Asia/Kolkata] PHP Fatal error:  Call to a member function find() on a non-object in /home/ksshank/public_html/lms/app/Controller/LeadsController.php on line 117

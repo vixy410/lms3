@@ -1,5 +1,7 @@
 <div class="leads index">
+    <?php if ($current_user['role']=='admin'): ?>
     <div style="float: right"><?php echo $this->Html->link('CSV','/leads/exportView/',array('class' => 'btn btn-success')); ?></div>
+    <?php endif; ?>
    
     
       <!-------------Action Menu------------>
@@ -7,7 +9,9 @@
       <!------------------------------------>
       
       <!-------------Filter---------------->
+      <?php if ($current_user['role']=='admin'): ?>
       <?php echo $this->element('filterMenu');?>
+      <?php endif; ?>
 
       <!-------------/Filter---------------->
     

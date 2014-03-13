@@ -5,8 +5,8 @@ class DATABASE_CONFIG {
 		'datasource' => 'Database/Mysql',
 		'persistent' => false,
 		'host' => 'localhost',
-		'login' => 'root',
-		'password' => '',
+		'login' => 'leaddb',
+		'password' => 'leaddb5577',
 		'database' => 'lms',
 		'prefix' => '',
 		'encoding' => 'utf8'

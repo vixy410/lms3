@@ -1,8 +1,6 @@
 <?php
 App::uses('AppController', 'Controller');
 App::uses('CakeEmail', 'Network/Email');
-//App::import('Controller','Users');
-//App::import('Controller','Statuses');
 
 /**
  * Leads Controller
@@ -73,19 +71,18 @@ class LeadsController extends AppController {
     }
     
     
-// Mail Set up
-   
-/**function _sendMail($id) {
+    // Mail Set up
+    /*function _sendMail($id) {
     $this->loadModel('User');
     $this->loadModel('Account');
     
     $Email = new CakeEmail();
     $this->Lead->contain( array('User','Account') );
                     $email = $Email->from(array('vikas@meridiansolutions.co'=>'Meridian Lead Sales Management'))
-                             //->to('shankar@meridiansolutions.co.in')
+                             
                             ->viewVars(array(
                                 'user' => $this->User->find('first',array('conditions'=>  array('id'=> $this->Auth->user('id')))),
-                                'account' => $this->Lead->Account->find('first')
+                                 'account' => $this->Account->find('first',array('conditions'=>array('Account.id'=>$this->Auth->user('id'))))
                                 ))
                              ->to('vikas.meridiansolutions@gmail.com')
                              ->subject('Lead Add')
@@ -93,12 +90,13 @@ class LeadsController extends AppController {
                             ->template('new_lead')
                              ->send('A Lead has been Added');
 }*/
-    
+
+ 
     function _sendMail($id) {
     $this->loadModel('User');
     $this->loadModel('Account');
     
-    $conditionsSubQuery ['"Lead"."user_id"'] = $this->Auth->user('id'); 
+  /*  $conditionsSubQuery ['"Lead"."user_id"'] = $this->Auth->user('id'); 
     $db = $this->Lead->getDataSource();
     $subQuery = $db->buildStatement(array(
         'table'=>$db->fullTableName($this->Lead),
@@ -108,18 +106,19 @@ class LeadsController extends AppController {
             );
     $subQuery ='"Lead"."account_id" IN ('.$subQuery.')';
     $subQueryExpression = $db->expression($subQuery);
-    $conditions[] = $subQueryExpression;
+    $conditions[] = $subQueryExpression;*/
     
     
     $Email = new CakeEmail();
     //$this->Lead->contain( array('User','Account') );
-                    $email = $Email->from(array('vikas@meridiansolutions.co'=>'Meridian Lead Sales Management'))
-                             //->to('shankar@meridiansolutions.co.in')
+                    $email = $Email->from(array('info@meridiansolutions.co'=>'Meridian Lead Sales Management'))
+                             
                             ->viewVars(array(
-                                'user' => $this->User->find('first',array('conditions'=>  array('id'=> $this->Auth->user('id')))),
-                                 'account' => $this->Account->find('first',array('conditions'=>array('id'=>$conditions)))
+                                'user' => $this->User->find('first',array('conditions'=>  array('id'=> $this->Auth->user('id'))))
+                                // 'account' => $this->Account->find('first',array('conditions'=>array('id'=>$conditions)))
                                 ))
                              ->to('vikas.meridiansolutions@gmail.com')
+							 
                              ->subject('Lead Add')
                             ->emailFormat('html')
                             ->template('new_lead')
@@ -167,11 +166,12 @@ class LeadsController extends AppController {
 	public function add() {
 		if ($this->request->is('post')) {
 			$this->Lead->create();
-                                  //$this->Lead->contain( array('User','Status') );
+                                  $this->Lead->contain( array('User','Status') );
 
                         $this->request->data['Lead']['user_id'] = $this->Auth->user('id');
                        $this->request->data['Lead']['date_added'] = date_default_timezone_set("Asia/Kolkata");
 			if ($this->Lead->save($this->request->data)) {
+                            //Mail function
                             $this->_sendMail($this->request->data['Lead']['user_id']);
 				$this->Session->setFlash(__('The lead has been saved.'),'alert',array(
                                     'plugin' => 'BoostCake',
@@ -302,6 +302,51 @@ class LeadsController extends AppController {
                     'conditions' => array('Status.status' => 'Lost')
                 );
 		$this->set('leads', $this->Paginator->paginate());
+        }
+		
+		 public function user_filter($arg1 = NULL) {
+            
+            //$this->render('filter');
+            //$arg = $arg1;
+            
+            $this->loadModel('User');
+            
+             $this->User->recursive = 0;
+            $userFilter = $this->User->find('all',array(
+                'fields' => array('User.username')
+            ));
+            
+            
+            
+            $this->set('userFilter', $userFilter);
+            $this->Paginator->settings = array(
+                    'order' => array(
+                        'date_added' => 'desc'
+                    ),
+                'conditions' => array('User.username' => $arg1)
+                );
+		$this->set('leads', $this->Paginator->paginate());
+            
+            return $userFilter;
+            
+            
+            
+            
+        }
+		
+		//date filter method
+		 function  date_filter(){
+           
+            $from = $this->request->data['Lead']['from'];
+            $to = $this->request->data['Lead']['to'];
+            
+           
+            $this->Paginator->settings = array(
+                    
+                'conditions' => array('closing_month BETWEEN ? AND ?' => array($from, $to))
+                );
+		$this->set('leads', $this->Paginator->paginate());
+               
         }
         
         

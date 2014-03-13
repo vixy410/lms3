@@ -1,3 +1,12 @@
+<?php $userFilters  = $this->requestAction(
+        array(
+            'controller' => 'leads',
+            'action' => 'user_filter',
+          
+        )
+        
+        //array('return')
+        ); ?>
 <div class="row">
 <div class="col-md-4">
 <ul class="nav nav-tabs">
@@ -20,6 +29,35 @@
               </li>
             </ul>           
        </li>
+       <?php if ($current_user['role']=='admin'): ?>
+       
+       <li class="dropdown">
+           <a class="dropdown-toggle" data-toggle = "dropdown" href="#">
+               User <span class="caret"></span>
+           </a>
+           <ul class="dropdown-menu">
+               <?php foreach ($userFilters as $userFilter): ?>
+               <li>
+                   <?php  echo $this->Html->link($userFilter['User']['username'],array(
+                                'controller'=>'leads',
+                                'action'=>'user_filter',
+                                $userFilter['User']['username']
+                            )
+                         
+                           ); 
+                   //echo "<br />";
+                   ?>
+               </li>
+               <?php endforeach;  ?>
+               
+                
+              
+           </ul>
+       </li>
+       <?php endif; ?> 
  </ul>
 </div>
+<div style="margin: 7px auto" class="col-md-6">
+    <?php echo $this->element('date_filter',array() );?>
+    </div>
 </div>

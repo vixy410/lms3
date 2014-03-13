@@ -36,6 +36,7 @@ class AppController extends Controller {
                                 'Form' => array('className' => 'BoostCake.BoostCakeForm'),
                                 'Paginator' => array('className' => 'BoostCake.BoostCakePaginator'),
                                 'Session',
+                                
                                 );
     public $components = array( 
                              
@@ -64,6 +65,7 @@ isAuthorize method
 access rights to login user        
         
 */
+    
     
     public function isAuthorized( $user ){
         return true;
@@ -94,6 +96,7 @@ access rights to non-logged in users
        // App::import('Model', 'User');
          // User::store($this->Auth->user());
     }
+
     
    
 }

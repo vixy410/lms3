@@ -1,16 +1,15 @@
 A Lead has been added by <?php 
-//$user['User']['username'] == $current_user['username'];
-echo $user['User']['username']; ?><br>
+echo $user['User']['username']; ?><br><br>
 Details
 <br>
 <dl >
 		
-		<dt><?php echo __('Account'); ?></dt>
+		<!--<dt><?php //echo __('Account'); ?></dt>
 		<dd>
-			<?php echo $account['Account']['account_name']; ?>
+			<?php //echo $account['Account']['account_name']; ?>
 			&nbsp;
-		</dd>
-		<dt><?php echo __('Name'); ?></dt>
+		</dd>-->
+		<dt><?php echo __('Contact Person Name'); ?></dt>
 		<dd>
 			<?php echo h($this->request->data['Lead']['name']); ?>
 			&nbsp;
@@ -50,7 +49,7 @@ Details
 			<?php echo h($this->request->data['Lead']['margin']); ?>
 			&nbsp;
 		</dd>
-		<dt><?php echo __('Closing Month'); ?></dt>
+		<dt><?php echo __('Expected closing date'); ?></dt>
 		<dd>
 			<?php echo h($this->request->data['Lead']['closing_month']); ?>
 			&nbsp;
